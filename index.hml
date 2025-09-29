@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Gas & Fire Safety System - Dashboard</title>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1>Gas & Fire Safety System</h1>
+          <p class="subtitle">Real-time monitoring and safety management</p>
+        </div>
+        <div class="last-update" id="lastUpdate">
+          Last Updated: 2025-09-29 14:32:45
+        </div>
+      </header>
+
+      <!-- System Status Banner -->
+      <div class="status-banner status-safe" id="statusBanner">
+        <div class="status-icon">✓</div>
+        <div class="status-text">
+          <h2>System Status: <span id="statusText">Safe</span></h2>
+          <p id="statusDescription">All systems operating normally</p>
+        </div>
+      </div>
+
+      <!-- Sensor Cards -->
+      <div class="sensor-grid">
+        <!-- Gas Level Card -->
+        <div class="sensor-card">
+          <div class="sensor-header">
+            <div class="sensor-icon gas-icon">
+              <img src="gas icon.svg" alt="gas icon" />
+            </div>
+            <h3>Gas Level</h3>
+          </div>
+          <div class="sensor-reading">
+            <span class="reading-value" id="gasValue">45</span>
+            <span class="reading-unit">%</span>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="gasProgress"
+              style="width: 45%"
+            ></div>
+          </div>
+          <div class="sensor-status">
+            <span class="badge badge-safe" id="gasBadge">Normal</span>
+          </div>
+        </div>
+
+        <!-- Temperature Card -->
+        <div class="sensor-card">
+          <div class="sensor-header">
+            <div class="sensor-icon temp-icon">
+              <img src="temperature icon.svg" alt="temperature icon" />
+            </div>
+            <h3>Temperature</h3>
+          </div>
+          <div class="sensor-reading">
+            <span class="reading-value" id="tempValue">28.5</span>
+            <span class="reading-unit">°C</span>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill temp-fill"
+              id="tempProgress"
+              style="width: 47.5%"
+            ></div>
+          </div>
+          <div class="sensor-status">
+            <span class="badge badge-safe" id="tempBadge">Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Incident History -->
+      <div class="incident-section">
+        <div class="section-header">
+          <h2>Incident History</h2>
+          <button class="refresh-btn" onclick="refreshData()">Refresh</button>
+        </div>
+
+        <div class="incident-table-wrapper">
+          <table class="incident-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Timestamp</th>
+                <th>Description</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#1</td>
+                <td><span class="incident-type">Gas Leak</span></td>
+                <td><span class="badge badge-warning">Warning</span></td>
+                <td>2025-09-27 11:32:45</td>
+                <td>Elevated gas levels detected in kitchen area</td>
+                <td><span class="status-resolved">✓ Resolved</span></td>
+              </tr>
+              <tr>
+                <td>#2</td>
+                <td><span class="incident-type">High Temperature</span></td>
+                <td><span class="badge badge-warning">Warning</span></td>
+                <td>2025-09-24 06:32:45</td>
+                <td>Temperature exceeded 45°C threshold</td>
+                <td><span class="status-resolved">✓ Resolved</span></td>
+              </tr>
+              <tr>
+                <td>#3</td>
+                <td><span class="incident-type">Gas Leak</span></td>
+                <td><span class="badge badge-danger">Danger</span></td>
+                <td>2025-09-22 02:32:45</td>
+                <td>
+                  Critical gas levels detected - emergency protocol activated
+                </td>
+                <td><span class="status-resolved">✓ Resolved</span></td>
+              </tr>
+              <tr>
+                <td>#4</td>
+                <td><span class="incident-type">System Check</span></td>
+                <td><span class="badge badge-safe">Safe</span></td>
+                <td>2025-09-19 14:32:45</td>
+                <td>Routine system maintenance completed</td>
+                <td><span class="status-resolved">✓ Resolved</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Gas & Fire Safety System | Monitoring 24/7</p>
+      </footer>
+    </div>
+  </body>
+</html>
