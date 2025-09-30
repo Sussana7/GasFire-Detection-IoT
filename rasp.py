@@ -9,12 +9,13 @@ from datetime import datetime
 # Setup
 DHT_PIN = board.D17
 GAS_SENSOR_PIN = 4
-API_ENDPOINT = "http://<your-server-ip>:5000/api/data"
+API_ENDPOINT = "http://127.0.0.1:5000/api/data"
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(GAS_SENSOR_PIN, GPIO.IN)
-
+buzzer= 23
+GPIO.setup(buzzer,GPIO.OUT)
 sensor = adafruit_dht.DHT22(DHT_PIN)
 
 while True:
@@ -37,4 +38,4 @@ while True:
     except Exception as e:
         print("Error:", e)
 
-    time.sleep(10)  # Send every 10 seconds
+    time.sleep(0.5)  # Send every 10 seconds

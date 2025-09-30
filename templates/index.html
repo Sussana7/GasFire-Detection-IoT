@@ -31,9 +31,8 @@
       sizes="32x32"
       href="favicon_io (1)/favicon-32x32.png"
     />
-    <link rel="manifest" href="/site.webmanifest" />
  <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
-    <title>Gas & Fire Safety System - Dashboard</title>
+    <title>Dashboard</title>
   </head>
   <body>
     <div class="container">
@@ -82,7 +81,28 @@
             <span class="badge badge-safe" id="gasBadge">Normal</span>
           </div>
         </div>
-
+          <div class="sensor-card">
+          <div class="sensor-header">
+            <div class="sensor-icon gas-icon">
+              <img src=" {{ url_for('static', filename='icons/gas_icon.svg') }}" alt="gas icon" />
+            </div>
+            <h3>Humidity</h3>
+          </div>
+          <div class="sensor-reading">
+            <span class="reading-value" id="humidityValue">45</span>
+            <span class="reading-unit">%</span>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="gasProgress"
+              style="width: 45%"
+            ></div>
+          </div>
+          <div class="sensor-status">
+            <span class="badge badge-safe" id="gasBadge">Normal</span>
+          </div>
+        </div>  
         <!-- Temperature Card -->
         <div class="sensor-card">
           <div class="sensor-header">
@@ -127,42 +147,8 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>#1</td>
-                <td><span class="incident-type">Gas Leak</span></td>
-                <td><span class="badge badge-warning">Warning</span></td>
-                <td>2025-09-27 11:32:45</td>
-                <td>Elevated gas levels detected in kitchen area</td>
-                <td><span class="status-resolved">✓ Resolved</span></td>
-              </tr>
-              <tr>
-                <td>#2</td>
-                <td><span class="incident-type">High Temperature</span></td>
-                <td><span class="badge badge-warning">Warning</span></td>
-                <td>2025-09-24 06:32:45</td>
-                <td>Temperature exceeded 45°C threshold</td>
-                <td><span class="status-resolved">✓ Resolved</span></td>
-              </tr>
-              <tr>
-                <td>#3</td>
-                <td><span class="incident-type">Gas Leak</span></td>
-                <td><span class="badge badge-danger">Danger</span></td>
-                <td>2025-09-22 02:32:45</td>
-                <td>
-                  Critical gas levels detected - emergency protocol activated
-                </td>
-                <td><span class="status-resolved">✓ Resolved</span></td>
-              </tr>
-              <tr>
-                <td>#4</td>
-                <td><span class="incident-type">System Check</span></td>
-                <td><span class="badge badge-safe">Safe</span></td>
-                <td>2025-09-19 14:32:45</td>
-                <td>Routine system maintenance completed</td>
-                <td><span class="status-resolved">✓ Resolved</span></td>
-              </tr>
-            </tbody>
+         <tbody id="incidentTableBody">
+         </tbody>
           </table>
         </div>
       </div>
