@@ -32,7 +32,7 @@
       href="favicon_io (1)/favicon-32x32.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="stylesheet" href="style.css" />
+ <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
     <title>Gas & Fire Safety System - Dashboard</title>
   </head>
   <body>
@@ -63,7 +63,7 @@
         <div class="sensor-card">
           <div class="sensor-header">
             <div class="sensor-icon gas-icon">
-              <img src="gas icon.svg" alt="gas icon" />
+              <img src=" {{ url_for('static', filename='icons/gas_icon.svg') }}" alt="gas icon" />
             </div>
             <h3>Gas Level</h3>
           </div>
@@ -87,7 +87,7 @@
         <div class="sensor-card">
           <div class="sensor-header">
             <div class="sensor-icon temp-icon">
-              <img src="temperature monitor.svg" alt="temperature icon" />
+              <img src=" {{ url_for('static', filename='icons/temperature_monitor.svg') }}" alt="temperature icon" />
             </div>
             <h3>Temperature</h3>
           </div>
@@ -173,4 +173,5 @@
       </footer>
     </div>
   </body>
+   <script src="{{ url_for('static', filename='/js/script.js') }}"></script>
 </html>

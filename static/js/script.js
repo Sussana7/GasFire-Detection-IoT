@@ -70,5 +70,6 @@ function refreshData() {
   updateSensorData();
 }
 
+
 // Update sensor data every 3 seconds to simulate real-time monitoring
 setInterval(updateSensorData, 3000);

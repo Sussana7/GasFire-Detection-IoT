@@ -6,7 +6,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 # Set up the GPIO pin for reading the DO output
-DO_PIN = 7  # Replace with the actual GPIO pin number
+DO_PIN = 7 # Replace with the actual GPIO pin number
 GPIO.setup(DO_PIN, GPIO.IN)
 
 try:
