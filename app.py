@@ -1,41 +1,31 @@
-from dotenv import load_dotenv
-load_dotenv()
-import matplotlib.pyplot as plt
+
+from flask import Flask, request, jsonify, render_template, send_file
+from flask_socketio import SocketIO, emit
+import os, csv, io
 import pandas as pd
-import io
-import base64
-from flask import send_file
-from flask import Flask, request, jsonify, render_template
-import csv
+import matplotlib.pyplot as plt
 from config import Config
-import os
-from email_utils import mail, send_alert  
+from email_utils import mail, send_alert
 
 app = Flask(__name__)
 app.config.from_object(Config)
-mail.init_app(app) 
+
 
 LOG_FILE = "sensor_log.csv"
 latest_data = {}
 
-print("MAIL_DEFAULT_SENDER =", app.config.get("MAIL_DEFAULT_SENDER"))
-
+# Ensure log file exists
 if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["timestamp", "temperature_c", "humidity", "gas_state"])
 
 
-@app.route('/api/data', methods=['POST'])
+@app.route("/api/data", methods=["POST"])
 def receive_data():
+    """Still keep HTTP API (in case Pi can’t use sockets)"""
     global latest_data
     data = request.get_json()
-    print("Received data:", data)
-
-    required = ["timestamp", "temperature_c", "humidity", "gas_state"]
-    if not all(k in data for k in required):
-        return jsonify({"error": "Missing fields"}), 400
-
     latest_data = data
 
     with open(LOG_FILE, "a", newline="") as file:
@@ -47,39 +37,21 @@ def receive_data():
             data["gas_state"]
         ])
 
-    if data['gas_state'] == 'Gas Present':
-        subject = "⚠️ Gas Detected in Your Home!"
-        recipients = [os.getenv("HOMEOWNER_EMAIL")]
-        body = (
-            f"Alert!\n\n"
-            f"Gas has been detected by your sensor setup.\n\n"
-            f"Time: {data['timestamp']}\n"
-            f"Temperature: {data['temperature_c']} °C\n"
-            f"Humidity: {data['humidity']} %\n\n"
-            f"Please take action immediately!"
-        )
+    # 🚨 Send to frontend clients in real-time
+    socketio.emit("sensor_update", data)
+    socketio.emit("log_update", data) 
 
+    # Email alert
+    if data['gas_state'] == 'Gas Present':
+        subject = "⚠️ Gas Detected!"
+        recipients = [os.getenv("HOMEOWNER_EMAIL")]
+        body = f"Gas detected!\n\nTime: {data['timestamp']}\nTemp: {data['temperature_c']} °C\nHumidity: {data['humidity']} %"
         send_alert(subject, body, recipients)
+       
 
     return jsonify({"message": "Data received"}), 200
 
 
-@app.route("/api/live", methods=["GET"])
-def get_live_data():
-    if not latest_data:
-        return jsonify({"error": "No data yet"}), 404
-    return jsonify(latest_data)
-
-
-@app.route("/api/log", methods=["GET"])
-def get_log():
-    try:
-        with open(LOG_FILE, "r") as file:
-            reader = csv.DictReader(file)
-            data = list(reader)
-        return jsonify(data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @app.route("/plot")
 def plot_data():
@@ -132,11 +104,21 @@ def plot_data():
         return f"Error generating plot: {e}", 500
 
 
-
 @app.route("/")
 def dashboard():
     return render_template("index.html")
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    socketio.run(app, host="0.0.0.0", port=5000)
+
+
+
+
+# @app.route("/")
+# def dashboard():
+#     return render_template("index.html")
+
+
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=5000)

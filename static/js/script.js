@@ -1,27 +1,21 @@
-async function updateSensorData() {
-  try {
-    const response = await fetch("/api/live");
-    const data = await response.json();
+  const socket = io();
+  socket.on("connect", () => {
+    console.log("Connected to server via Socket.IO");
+  });
 
-    if (data.error) {
-      console.error(data.error);
-      return;
-    }
+  socket.on("sensor_update", (data) => {
+    console.log("Live data:", data);
 
-    const gasState = data.gas_state;
-    const temp = parseFloat(data.temperature_c);
-    const humidity = parseFloat(data.humidity);
-
-    // Update DOM
-    document.getElementById("tempValue").textContent = temp;
-    document.getElementById("tempProgress").style.width = (temp / 60) * 100 + "%";
-    document.getElementById("humidityValue").textContent = humidity;
-    document.getElementById("gasValue").textContent = gasState;
-
+    // Update DOM elements
+    document.getElementById("tempValue").textContent = data.temperature_c;
+    document.getElementById("humidityValue").textContent = data.humidity;
+    document.getElementById("gasValue").textContent = data.gas_state;
     document.getElementById("lastUpdate").textContent =
       "Last Updated: " + data.timestamp;
-        // Update gas badge
-  const gasBadge = document.getElementById("gasBadge");
+
+    // Update UI logic as before (badges, banners, etc.)
+  });
+ const gasBadge = document.getElementById("gasBadge");
 
   if (gasState == "No Gas") {
     gasBadge.className = "badge badge-safe";
@@ -74,56 +68,33 @@ async function updateSensorData() {
   }
 
 
-  } catch (err) {
-    console.error("Failed to fetch sensor data:", err);
-  }
-  
-}
+  const logTableBody = document.getElementById("logTableBody");
+  let logData = [];  // keep history in memory
 
-// Poll every 3 seconds
-setInterval(updateSensorData, 3000);
+  socket.on("log_update", (entry) => {
+    // Push new entry at the front
+    logData.unshift(entry);
 
-
-// Load incident table from backend
-async function loadIncidentTable() {
-  try {
-    const response = await fetch("/api/log");
-    const data = await response.json();
-
-    if (!Array.isArray(data)) {
-      console.error("Invalid incident data format:", data);
-      return;
+    // Keep only 10 latest
+    if (logData.length > 10) {
+      logData.pop();
     }
 
-    const tbody = document.getElementById("incidentTableBody");
-    tbody.innerHTML = ""; 
+    // Rebuild table body
+    logTableBody.innerHTML = "";
+    logData.forEach((row, index) => {
+      const tr = document.createElement("tr");
 
-    data.forEach((incident, index) => {
-      const row = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.timestamp}</td>
+        <td>${row.temperature_c}</td>
+        <td>${row.humidity}</td>
+        <td>${row.gas_state}</td>
+      `;
 
-      // ID
-      const idCell = document.createElement("td");
-      idCell.textContent = `#${incident.id || index + 1}`;
-      row.appendChild(idCell);
-
-
-      // Timestamp
-      const timeCell = document.createElement("td");
-      timeCell.textContent = incident.timestamp;
-      row.appendChild(timeCell);
-
-      // // Description
-      const descCell = document.createElement("td");
-      descCell.textContent = incident.description;
-      row.appendChild(descCell);
-
-
-      tbody.appendChild(row);
+      logTableBody.appendChild(tr);
     });
-  } catch (err) {
-    console.error("Failed to load incident table:", err);
-  }
-}
+  });
 
 
 
