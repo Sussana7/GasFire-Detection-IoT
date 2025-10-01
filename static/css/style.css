@@ -242,7 +242,29 @@ body {
   color: #0f172a;
   line-height: 1;
   letter-spacing: -0.12rem;
+}.responsive-plot {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
+
+/* Example media query for small screens */
+@media (max-width: 600px) {
+    .sensor-grid { 
+        display: flex;
+        flex-direction: column;
+    }
+    .sensor-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    /* Adjust font sizes, padding etc */
+    body {
+        font-size: 14px;
+    }
+}
+
 
 .reading-unit {
   font-size: 1.6rem;
@@ -691,4 +713,27 @@ body {
     height: 3.5rem;
     font-size: 2rem;
   }
+}
+
+.responsive-plot {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Example media query for small screens */
+@media (max-width: 600px) {
+    .sensor-grid { 
+        display: flex;
+        flex-direction: column;
+    }
+    .sensor-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    /* Adjust font sizes, padding etc */
+    body {
+        font-size: 14px;
+    }
 }
