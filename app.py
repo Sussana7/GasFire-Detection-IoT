@@ -9,18 +9,17 @@ from flask import Flask, request, jsonify, render_template
 import csv
 from config import Config
 import os
-from email_utils import mail, send_alert  # ✅ Use renamed module
+from email_utils import mail, send_alert  
 
 app = Flask(__name__)
 app.config.from_object(Config)
-mail.init_app(app)  # ✅ Initialize Flask-Mail properly
+mail.init_app(app) 
 
 LOG_FILE = "sensor_log.csv"
 latest_data = {}
 
 print("MAIL_DEFAULT_SENDER =", app.config.get("MAIL_DEFAULT_SENDER"))
 
-# Ensure log file exists with headers
 if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w", newline="") as file:
         writer = csv.writer(file)
@@ -48,7 +47,6 @@ def receive_data():
             data["gas_state"]
         ])
 
-    # ✅ FIXED: No trailing commas (which create tuples!)
     if data['gas_state'] == 'Gas Present':
         subject = "⚠️ Gas Detected in Your Home!"
         recipients = [os.getenv("HOMEOWNER_EMAIL")]
@@ -94,12 +92,11 @@ def plot_data():
         # Convert gas_state to binary (0/1)
         df["gas_binary"] = df["gas_state"].apply(lambda x: 1 if x == "Gas Present" else 0)
 
-        plt.style.use("default")  # clean white style
+        plt.style.use("default")  
 
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.set_title("Sensor Data Over Time", fontsize=16, weight="bold")
 
-        # Bold, Excel-style lines with distinct colors
         ax.plot(df["timestamp"], df["temperature_c"],
                 label="Temperature (°C)", color="red", linewidth=2.5)
 
@@ -114,7 +111,7 @@ def plot_data():
         ax.set_xlabel("Time", fontsize=12, weight="bold")
         ax.set_ylabel("Values", fontsize=12, weight="bold")
 
-        # Light grid, Excel-like
+        # Light grid
         ax.grid(True, linestyle="--", alpha=0.6)
 
         # Format time labels
@@ -123,7 +120,6 @@ def plot_data():
         # Legend
         ax.legend(loc="upper left", fontsize=11)
 
-        # Save image
         buf = io.BytesIO()
         plt.tight_layout()
         plt.savefig(buf, format="png")
