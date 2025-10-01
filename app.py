@@ -173,87 +173,55 @@ def get_log():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route("/plot")
 def plot_data():
     try:
-        df = pd.read_csv(LOG_FILE)
+        df = pd.read_csv(LOG_FILE, parse_dates=["timestamp"])
 
         if df.empty or not all(col in df.columns for col in ["timestamp", "temperature_c", "humidity", "gas_state"]):
             return "No valid data to plot", 400
 
-        # Convert timestamp column to datetime
-        df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
-
-        # Drop rows where timestamp is NaT or other essential data missing
-        df = df.dropna(subset=["timestamp", "temperature_c", "humidity"])
-
-        # Convert gas state to binary
+        # Convert gas_state to binary (0/1)
         df["gas_binary"] = df["gas_state"].apply(lambda x: 1 if x == "Gas Present" else 0)
 
-        # Use a nicer style
-        plt.style.use("seaborn-darkgrid")
+        plt.style.use("default")  # clean white style
 
-        fig, ax1 = plt.subplots(figsize=(10, 5))
-        fig.autofmt_xdate(rotation=45)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.set_title("Sensor Data Over Time", fontsize=16, weight="bold")
 
-        ax1.set_title("Sensor Data Over Time", fontsize=14)
-        ax1.set_xlabel("Time", fontsize=12)
-        ax1.set_ylabel("Temperature / Humidity", fontsize=12)
+        # Bold, Excel-style lines with distinct colors
+        ax.plot(df["timestamp"], df["temperature_c"],
+                label="Temperature (°C)", color="red", linewidth=2.5)
 
-        # Plot temperature and humidity with markers and lines
-        ax1.plot(
-            df["timestamp"],
-            df["temperature_c"],
-            label="Temperature (°C)",
-            color="tomato",
-            linestyle="-",
-            marker="o",
-            markersize=4,
-            linewidth=2
-        )
-        ax1.plot(
-            df["timestamp"],
-            df["humidity"],
-            label="Humidity (%)",
-            color="steelblue",
-            linestyle="--",
-            marker="s",
-            markersize=4,
-            linewidth=2
-        )
+        ax.plot(df["timestamp"], df["humidity"],
+                label="Humidity (%)", color="blue", linewidth=2.5)
 
-        # Second y-axis for gas presence
-        ax2 = ax1.twinx()
-        ax2.plot(
-            df["timestamp"],
-            df["gas_binary"],
-            label="Gas Detected",
-            color="green",
-            linestyle="-.",
-            marker="^",
-            markersize=4,
-            linewidth=1.5,
-            alpha=0.8
-        )
-        ax2.set_ylabel("Gas Presence (1 = Yes)", fontsize=12)
+        # Scale gas to stand out (0 or 100 instead of 0/1)
+        ax.plot(df["timestamp"], df["gas_binary"] * 100,
+                label="Gas Presence", color="green", linewidth=2.5)
 
-        # Grid
-        ax1.grid(True, which="major", linestyle="--", linewidth=0.5, color="gray", alpha=0.7)
+        # Axis labels
+        ax.set_xlabel("Time", fontsize=12, weight="bold")
+        ax.set_ylabel("Values", fontsize=12, weight="bold")
 
-        # Combine legends
-        lines1, labels1 = ax1.get_legend_handles_labels()
-        lines2, labels2 = ax2.get_legend_handles_labels()
-        ax1.legend(lines1 + lines2, labels1 + labels2, loc="upper left")
+        # Light grid, Excel-like
+        ax.grid(True, linestyle="--", alpha=0.6)
 
-        plt.tight_layout()
+        # Format time labels
+        fig.autofmt_xdate()
 
+        # Legend
+        ax.legend(loc="upper left", fontsize=11)
+
+        # Save image
         buf = io.BytesIO()
-        plt.savefig(buf, format="png", dpi=150)
+        plt.tight_layout()
+        plt.savefig(buf, format="png")
         buf.seek(0)
         plt.close(fig)
 
         return send_file(buf, mimetype="image/png")
+
     except Exception as e:
         return f"Error generating plot: {e}", 500
 

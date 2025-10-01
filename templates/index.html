@@ -3,35 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="{{ url_for('static', filename='/icons/favicon_io (1)/apple-touch-icon.png') }}" 
-    />
-    <link
-      rel="android-chrome-icon"
-      sizes="512x512"
-      href="{{ url_for('static', filename='/iconsfavicon_io (1)/android-chrome-512x512.png')}}"
-    />
-    <link
-      rel="android-chrome-icon"
-      sizes="192x192"
-      href="{{ url_for('static', filename='/iconsfavicon_io (1)/apple-touch-icon.png')}}"
-    />
+    <link rel="apple-touch-icon" sizes="192x192" 
+      href="/static/icons/android-chrome-192x192.png">
 
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="{{ url_for('static', filename='/iconsfavicon_io (1)/favicon-16x16.png')}}"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="{{ url_for('static', filename='/iconsfavicon_io (1)/favicon-32x32.png')}}"
-    />
- <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
+    <link rel="icon" type="image/png" sizes="512x512" 
+      href="/static/icons/android-chrome-512x512.png">
+
+    <link rel="icon" type="image/png" sizes="16x16" 
+      href="/static/icons/favicon-16x16.png'">
+
+    <link rel="shortcut icon" 
+      href="/static/icons/favicon.ico">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
     <title>Dashboard</title>
   </head>
   <body>
@@ -72,7 +56,7 @@
           </div>
           <div class="progress-bar">
             <div
-              class="progress-fill"
+              class="progress-fill gas-fill"
               id="gasProgress"
               style="width: 45%"
             ></div>
@@ -85,7 +69,7 @@
           <!-- Humidity Level Card -->
           <div class="sensor-card">
           <div class="sensor-header">
-            <div class="sensor-icon gas-icon">
+            <div class="sensor-icon humidity-icon">
               <img src=" {{ url_for('static', filename='icons/humidity_icon.svg') }}" alt="humidity_icon" />
             </div>
             <h3>Humidity</h3>
@@ -131,10 +115,7 @@
         </div>
       </div>
 
-      <h2>Sensor Graph</h2>
-<img src="/plot" alt="Sensor Graph">
-<h2>Sensor Graph</h2>
-<img src="/plot" alt="Sensor Graph" class="responsive-plot">
+          <img src="/plot" alt="Sensor Graph" class="responsive-plot">
 
 
 
@@ -150,11 +131,8 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Type</th>
-                <th>Severity</th>
                 <th>Timestamp</th>
                 <th>Description</th>
-                <th>Status</th>
               </tr>
             </thead>
          <tbody id="incidentTableBody">

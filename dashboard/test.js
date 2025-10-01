@@ -1,4 +1,3 @@
-
 async function updateSensorData() {
   try {
     const response = await fetch("/api/live");
@@ -18,8 +17,6 @@ async function updateSensorData() {
     document.getElementById("humidityValue").textContent = humidity;
     document.getElementById("gasState").textContent = gasState;
 
-    // Example: Update badges/indicators
-    // You can use your logic here for color codes, status, etc.
 
     document.getElementById("lastUpdate").textContent =
       "Last Updated: " + data.timestamp;

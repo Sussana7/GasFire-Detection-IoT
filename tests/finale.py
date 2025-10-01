@@ -3,7 +3,6 @@ import board
 import adafruit_dht
 import RPi.GPIO as GPIO
 
-# Disable warnings (optional)
 GPIO.setwarnings(False)
 
 # Set up the GPIO mode
@@ -23,15 +22,12 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT)
 try:
     while True:
         try:
-            # Read temperature and humidity
             temperature_c = sensor.temperature
             temperature_f = temperature_c * (9 / 5) + 32
             humidity = sensor.humidity
 
-            # Read gas sensor digital output
             gas_present = GPIO.input(DO_PIN)
 
-            # Determine gas state and control buzzer
             if gas_present == GPIO.LOW:
                 gas_state = "Gas Present"
                 GPIO.output(BUZZER_PIN, GPIO.HIGH)
@@ -41,7 +37,6 @@ try:
                 GPIO.output(BUZZER_PIN, GPIO.LOW)
                 print("No gas. Buzzer off.")
 
-            # Print readings
             print("==============================================")
             print(f"Gas State: {gas_state}")
             print("Temp={0:0.1f}ºC, Temp={1:0.1f}ºF, Humidity={2:0.1f}%".format(
@@ -49,7 +44,6 @@ try:
             print("==============================================")
 
         except RuntimeError as error:
-            # Handle intermittent DHT read errors
             print(f"DHT22 error: {error.args[0]}")
             time.sleep(2.0)
             continue

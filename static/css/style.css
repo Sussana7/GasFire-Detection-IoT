@@ -213,6 +213,11 @@ body {
 }
 
 .gas-icon {
+  background: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 100%);
+  border: 0.12rem solid #34d399; 
+}
+
+.humidity-icon {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   border: 0.12rem solid #93c5fd;
 }
@@ -242,27 +247,12 @@ body {
   color: #0f172a;
   line-height: 1;
   letter-spacing: -0.12rem;
+  
 }.responsive-plot {
     max-width: 100%;
     height: auto;
     display: block;
     margin: 0 auto;
-}
-
-/* Example media query for small screens */
-@media (max-width: 600px) {
-    .sensor-grid { 
-        display: flex;
-        flex-direction: column;
-    }
-    .sensor-card {
-        width: 100%;
-        margin-bottom: 1rem;
-    }
-    /* Adjust font sizes, padding etc */
-    body {
-        font-size: 14px;
-    }
 }
 
 
@@ -308,6 +298,12 @@ body {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+.gas-fill {
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%); 
+  box-shadow: 0 0.12rem 0.5rem rgba(34, 197, 94, 0.4); 
+}
+
 
 .temp-fill {
   background: linear-gradient(90deg, #f97316 0%, #dc2626 100%);
@@ -633,7 +629,20 @@ body {
 
   .incident-table td {
     padding: 0.75rem 0.6rem;
-    font-size: 0.8rem;
+    font-size: 0.8rem;@media (max-width: 600px) {
+    .sensor-grid { 
+        display: flex;
+        flex-direction: column;
+    }
+    .sensor-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    /* Adjust font sizes, padding etc */
+    body {
+        font-size: 14px;
+    }
+}
   }
 
   .incident-table thead {
@@ -732,7 +741,7 @@ body {
         width: 100%;
         margin-bottom: 1rem;
     }
-    /* Adjust font sizes, padding etc */
+
     body {
         font-size: 14px;
     }
