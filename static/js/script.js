@@ -5,15 +5,7 @@ const socket = io.connect("http://127.0.0.1:8080");
     console.log("Connected to server via Socket.IO");
   });
 
- socket.on("plot_image", (data) =>{
-        if (data.image) {
-            const imgTag = document.getElementById("sensor-plot");
-            imgTag.src = "data:image/png;base64," + data.image;
-            console.log(imgTag)
-        } else if (data.error) {
-            console.error("Error receiving plot image:", data.error);
-        }
-    });
+
   socket.on("sensor_update", (data) => {
     console.log("Live data:", data);
 
@@ -115,11 +107,6 @@ const socket = io.connect("http://127.0.0.1:8080");
 
 
 
-// Call this from the "Refresh" button
-function refreshData() {
-  loadIncidentTable();
-}
-
 // Auto-load on page
 document.addEventListener("DOMContentLoaded", () => {
   loadIncidentTable();
@@ -142,9 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function refreshData() {
-  updateSensorData();
-}
+
 
 
 

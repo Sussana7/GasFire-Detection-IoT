@@ -2,6 +2,7 @@ import socketio
 import board, adafruit_dht, RPi.GPIO as GPIO
 import time
 from datetime import datetime
+from gpiozero import LED
 
 # Socket.IO client
 sio = socketio.Client()
@@ -12,9 +13,13 @@ GAS_SENSOR_PIN = 4
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(GAS_SENSOR_PIN, GPIO.IN)
 buzzer = 23
+status = True
+led_gas_id = 12
+led_fan_id = 16
+led_gas_valve = LED(led_gas_id)
+led_gas_valve.on()
 GPIO.setup(buzzer, GPIO.OUT)
 sensor = adafruit_dht.DHT22(DHT_PIN)
-
 try:
     while True:
         try:
@@ -34,8 +39,11 @@ try:
             sio.emit("sensor_data", payload)
 
             # Alert condition (local buzzer)
-            if payload["temperature_c"] > 27.5 or gas_state == "Gas Present":
-                for _ in range(3):
+            if gas_state == "Gas Present" or (payload["temperature_c"] > 27.5 and gas_state == "Gas Present")  :
+                if status :
+                    led_gas_valve.off() 
+               
+                for _ in range(3):                     
                     GPIO.output(buzzer, GPIO.HIGH)
                     time.sleep(0.3)
                     GPIO.output(buzzer, GPIO.LOW)
