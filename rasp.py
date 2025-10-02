@@ -39,7 +39,7 @@ try:
             sio.emit("sensor_data", payload)
 
             # Alert condition (local buzzer)
-            if gas_state == "Gas Present" or (payload["temperature_c"] > 27.5 and gas_state == "Gas Present")  :
+            if gas_state == "Gas Present" or payload["temperature_c"] > 27.5   :
                 if status :
                     led_gas_valve.off() 
                

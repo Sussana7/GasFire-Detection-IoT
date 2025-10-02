@@ -35,10 +35,10 @@ const socket = io.connect("http://127.0.0.1:8080");
 
   // Update temp badge
   const tempBadge = document.getElementById("tempBadge");
-  if (temp < 35) {
+  if (temp < 25.0) {
     tempBadge.className = "badge badge-safe";
     tempBadge.textContent = "Normal";
-  } else if (temp < 45) {
+  } else if (temp <26.9 ) {
     tempBadge.className = "badge badge-warning";
     tempBadge.textContent = "Elevated";
   } else {
