@@ -115,7 +115,7 @@
         </div>
       </div>
 
-          <img src="/plot" alt="Sensor Graph" class="responsive-plot">
+          <img id="sensor-plot" src="" alt="Sensor Graph" class="responsive-plot">
 
 
 
@@ -135,7 +135,7 @@
                 <th>Description</th>
               </tr>
             </thead>
-         <tbody id="incidentTableBody">
+         <tbody id="logTableBody">
          </tbody>
           </table>
         </div>
@@ -147,6 +147,6 @@
       </footer>
     </div>
   </body>
-   <script src="{{ url_for('static', filename='/js/script.js') }}"></script>
-   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='/js/script.js') }}"></script>
 </html>

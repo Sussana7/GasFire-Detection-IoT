@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Socket.IO client
 sio = socketio.Client()
-sio.connect("http://197.255.72.248:5000")
+sio.connect("http://127.0.0.1:8080")
 
 DHT_PIN = board.D17
 GAS_SENSOR_PIN = 4

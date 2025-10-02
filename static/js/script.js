@@ -1,8 +1,19 @@
-  const socket = io();
+
+  window.addEventListener("DOMContentLoaded",()=>{
+const socket = io.connect("http://127.0.0.1:8080");
   socket.on("connect", () => {
     console.log("Connected to server via Socket.IO");
   });
 
+ socket.on("plot_image", (data) =>{
+        if (data.image) {
+            const imgTag = document.getElementById("sensor-plot");
+            imgTag.src = "data:image/png;base64," + data.image;
+            console.log(imgTag)
+        } else if (data.error) {
+            console.error("Error receiving plot image:", data.error);
+        }
+    });
   socket.on("sensor_update", (data) => {
     console.log("Live data:", data);
 
@@ -12,10 +23,10 @@
     document.getElementById("gasValue").textContent = data.gas_state;
     document.getElementById("lastUpdate").textContent =
       "Last Updated: " + data.timestamp;
-
-    // Update UI logic as before (badges, banners, etc.)
-  });
- const gasBadge = document.getElementById("gasBadge");
+        gasState = data.gas_state
+        temp =  data.temperature_c
+        humidity = data.humidity
+         const gasBadge = document.getElementById("gasBadge");
 
   if (gasState == "No Gas") {
     gasBadge.className = "badge badge-safe";
@@ -68,6 +79,13 @@
   }
 
 
+  });
+  
+
+
+   
+
+
   const logTableBody = document.getElementById("logTableBody");
   let logData = [];  // keep history in memory
 
@@ -86,9 +104,8 @@
       const tr = document.createElement("tr");
 
       tr.innerHTML = `
+        <td>${index}</td>
         <td>${row.timestamp}</td>
-        <td>${row.temperature_c}</td>
-        <td>${row.humidity}</td>
         <td>${row.gas_state}</td>
       `;
 
@@ -130,5 +147,5 @@ function refreshData() {
 }
 
 
-// Update sensor data every 3 seconds to simulate real-time monitoring
-setInterval(updateSensorData, 3000);
+
+  });
